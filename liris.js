@@ -4,7 +4,8 @@ var keys = require('./keys.js');
 var request = require('request');
 var twitter = require('twitter');
 var spotify = require('spotify');
-var client = new twitter(keys.twitterKeys);
+//changed from new twitter(keys.twitterKeys)
+var client = new twitter(keys.twitter);
 var fs = require('fs');
 
 //Stored argument's array
@@ -153,5 +154,6 @@ function doThing(){
     var txt = data.split(',');
 
     spotifySong(txt[1]);
+    console.log(txt);
   });
 }
