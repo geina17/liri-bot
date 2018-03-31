@@ -1,0 +1,25 @@
+{
+  "name": "liri-bot",
+  "version": "1.0.0",
+  "description": "creating a liri bot",
+  "main": "liri.js",
+  "dependencies": {
+    "request": "^2.75.0",
+    "spotify": "^0.3.0",
+    "twitter": "^1.4.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/geina17/liri-bot.git"
+  },
+  "author": "geina corrente",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/geina17/liri-bot/issues"
+  },
+  "homepage": "https://github.com/geina17/liri-bot#readme"
+}
