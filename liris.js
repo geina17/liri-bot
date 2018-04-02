@@ -66,8 +66,8 @@ function showTweets(){
         console.log("-----------------------");
         
         //adds text to log.txt file
-        fs.appendFile('log.txt', "@gna_zonaGUALA: " + tweets[i].text + " Created At: " + date.substring(0, 19));
-        fs.appendFile('log.txt', "-----------------------");
+        fs.appendFileSync('log.txt', "@gna_zonaGUALA: " + tweets[i].text + " Created At: " + date.substring(0, 19));
+        fs.appendFileSync('log.txt', "-----------------------");
       }
     }else{
       console.log('Error occurred');
@@ -75,40 +75,41 @@ function showTweets(){
     }
   });
 }
+function spotifySong(song) {
+  spotify.search({
+        type: 'track',
+        query: song
+      }, function (error, data) {
+        if (!error) {
+          // for(var i = 0; i < data.tracks.items.length; i++){
+          var songData = data.tracks.items[i];
+          //artist
+          console.log("Artist: " + songData.artists[0].name);
+          //song name
+          console.log("Song: " + songData.name);
+          //spotify preview link
+          console.log("Preview URL: " + songData.preview_url);
+          //album name
+          console.log("Album: " + songData.album.name);
+          console.log("-----------------------");
 
-function spotifySong(song){
-  spotify.search({ type: 'track', query: song}, function(error, data){
-    if(!error){
-      for(var i = 0; i < data.tracks.items.length; i++){
-        var songData = data.tracks.items[i];
-        //artist
-        console.log("Artist: " + songData.artists[0].name);
-        //song name
-        console.log("Song: " + songData.name);
-        //spotify preview link
-        console.log("Preview URL: " + songData.preview_url);
-        //album name
-        console.log("Album: " + songData.album.name);
-        console.log("-----------------------");
-        
-        //adds text to log.txt
-        fs.appendFile('log.txt', songData.artists[0].name);
-        fs.appendFile('log.txt', songData.name);
-        fs.appendFile('log.txt', songData.preview_url);
-        fs.appendFile('log.txt', songData.album.name);
-        fs.appendFile('log.txt', "-----------------------");
-      }
-    } else{
-      console.log('Error occurred.');
-    }
-  });
+          //adds text to log.txt
+          fs.appendFile("log.txt", "\n" + "Artist: " + songData.artists[0].name + "\nSong : " + songData.name + "\nPreview URL: " + songData.external_urls.spotify + "\nAlbum: " + songData.album.name + "\n", function (error) {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('An error occurred: ' + error);
+            }
+          });
+        }
+      });
 }
 
-function omdbData(movie){
-  var omdbURL = 'http://www.omdbapi.com/?t=' + movie + '&plot=short&tomatoes=true';
+function omdbData(movie) {
+  var omdbURL = 'http://www.omdbapi.com/?t=' + movie + '&plot=short&tomatoes=' + omdb.key;
 
-  request(omdbURL, function (error, response, body){
-    if(!error && response.statusCode == 200){
+  request(omdbURL, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
       var torso = JSON.parse(body);
 
       console.log("Title: " + torso.Title);
@@ -122,38 +123,41 @@ function omdbData(movie){
       console.log("Rotten Tomatoes URL: " + torso.tomatoURL);
 
       //adds text to log.txt
-      fs.appendFile('log.txt', "Title: " + torso.Title);
-      fs.appendFile('log.txt', "Release Year: " + torso.Year);
-      fs.appendFile('log.txt', "IMdB Rating: " + torso.imdbRating);
-      fs.appendFile('log.txt', "Country: " + torso.Country);
-      fs.appendFile('log.txt', "Language: " + torso.Language);
-      fs.appendFile('log.txt', "Plot: " + torso.Plot);
-      fs.appendFile('log.txt', "Actors: " + torso.Actors);
-      fs.appendFile('log.txt', "Rotten Tomatoes Rating: " + torso.tomatoRating);
-      fs.appendFile('log.txt', "Rotten Tomatoes URL: " + torso.tomatoURL);
-
-    } else{
+      fs.appendFile("log.txt", "\n" + '***** "' + info.Title + '" *****' + "\nReleased year" + info.Year + "\nIMDB rating " + info.Ratings[0].value + "\nRotten Tomatoes " + info.Ratings[1].Value + "\nLanguage: " + info.Language + "\nPlot: " + info.Plot + "\nActors: " + info.Actors + "\n",function (error) {
+        if(error){  
+        console.log(error);
+        }
+      });
+    }else {
       console.log('Error occurred.');
     }
-    if(movie === "Mr. Nobody"){
-      console.log("-----------------------");
-      console.log("If you haven't watched 'Mr. Nobody,' then you should: http://www.imdb.com/title/tt0485947/");
-      console.log("It's on Netflix!");
-
-      //adds text to log.txt
-      fs.appendFile('log.txt', "-----------------------");
-      fs.appendFile('log.txt', "If you haven't watched 'Mr. Nobody,' then you should: http://www.imdb.com/title/tt0485947/");
-      fs.appendFile('log.txt', "It's on Netflix!");
-    }
   });
-
 }
 
-function doThing(){
-  fs.readFile('random.txt', "utf8", function(error, data){
-    var txt = data.split(',');
+//node do-what-it-says
+function doThis () {
 
-    spotifySong(txt[1]);
-    console.log(txt);
+  fs.readFile("random.txt", "utf8", function(error, data) {
+
+      var things = data.split(",");
+      var command = things[0];
+      var searchInput = things[1];
+
+      if (!error) {
+
+          for (var i = 1; i < things.length; i++) {
+              if (command === "my-tweets") {
+                  myTweets(searchInput);
+              } else if (command === "spotify-this-song") {
+                  spotifyThisSong(searchInput);
+              } else if (command === "movie-this") {
+                  movieThis(searchInput);
+              } else {
+                  return;
+              }
+          }
+      } else {
+          return console.log(error);
+      }
   });
 }
