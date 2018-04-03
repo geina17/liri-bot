@@ -1,6 +1,6 @@
 to do:
-identify "split"
-identify "items"
+identify "split"(175),
+identify "items"(88),
 
 ## Welcome to GitHub Pages
 
