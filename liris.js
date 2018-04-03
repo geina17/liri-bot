@@ -16,97 +16,104 @@ var command = process.argv[2];
 var x = "";
 
 //attaches multiple word arguments
-for (var i=3; i<nodeArgv.length; i++){
-  if(i>3 && i<nodeArgv.length){
+for (var i = 3; i < nodeArgv.length; i++) {
+  if (i > 3 && i < nodeArgv.length) {
     x = x + "+" + nodeArgv[i];
-  } else{
+  } else {
     x = x + nodeArgv[i];
   }
 }
 
 //switch case
-switch(command){
+switch (command) {
   case "my-tweets":
     showTweets();
-  break;
+    break;
 
   case "spotify-this-song":
-    if(x){
+    if (x) {
       spotifySong(x);
-    } else{
+    } else {
       spotifySong("Fluorescent Adolescent");
     }
-  break;
+    break;
 
   case "movie-this":
-    if(x){
+    if (x) {
       omdbData(x);
-    } else{
+    } else {
       omdbData("Mr. Nobody");
     }
-  break;
+    break;
 
   case "do-what-it-says":
     doThing();
-  break;
+    break;
 
   default:
     console.log("{Please enter a command: my-tweets, spotify-this-song, movie-this, do-what-it-says}");
-  break;
+    break;
 }
 
-function showTweets(){
+function showTweets() {
   //Display last 20 Tweets
-  var screenName = {screen_name: 'gna_zonaGUALA'};
-  client.get('statuses/user_timeline', screenName, function(error, tweets, response){
-    if(!error){
-      for(var i = 0; i<tweets.length; i++){
+  var screenName = {
+    screen_name: 'gna_zonaGUALA'
+  };
+  client.get('statuses/user_timeline', screenName, function (error, tweets, response) {
+    if (!error) {
+      for (var i = 0; i < tweets.length; i++) {
         var date = tweets[i].created_at;
         console.log("@gna_zonaGUALA: " + tweets[i].text + " Created At: " + date.substring(0, 19));
         console.log("-----------------------");
-        
+
         //adds text to log.txt file
         fs.appendFileSync('log.txt', "@gna_zonaGUALA: " + tweets[i].text + " Created At: " + date.substring(0, 19));
         fs.appendFileSync('log.txt', "-----------------------");
       }
-    }else{
+    } else {
       console.log('Error occurred');
       console.log(error);
     }
   });
 }
+
 function spotifySong(song) {
   spotify.search({
-        type: 'track',
-        query: song
-      }, function (error, data) {
-        if (!error) {
-          // for(var i = 0; i < data.tracks.items.length; i++){
-          var songData = data.tracks.items[i];
-          //artist
-          console.log("Artist: " + songData.artists[0].name);
-          //song name
-          console.log("Song: " + songData.name);
-          //spotify preview link
-          console.log("Preview URL: " + songData.preview_url);
-          //album name
-          console.log("Album: " + songData.album.name);
-          console.log("-----------------------");
+    type: 'track',
+    query: song
+  }, function (error, data) {
+    console.log(error);
+    console.log("tama");
+    if (!error) {
+      
+      console.log(data.tracks);
+      // for(var i = 0; i < songData.length; i++){
+      var songData = data.tracks.items[i];
+      //artist
+      console.log("Artist: " + songData.artists[0].name);
+      //song name
+      console.log("Song: " + songData.name);
+      //spotify preview link
+      console.log("Preview URL: " + songData.preview_url);
+      //album name
+      console.log("Album: " + songData.album.name);
+      console.log("-----------------------");
 
-          //adds text to log.txt
-          fs.appendFile("log.txt", "\n" + "Artist: " + songData.artists[0].name + "\nSong : " + songData.name + "\nPreview URL: " + songData.external_urls.spotify + "\nAlbum: " + songData.album.name + "\n", function (error) {
-            if (error) {
-              console.log(error);
-            } else {
-              console.log('An error occurred: ' + error);
-            }
-          });
+      //adds text to log.txt
+      fs.appendFile("log.txt", "\n" + "Artist: " + songData.artists[0].name + "\nSong : " + songData.name + "\nPreview URL: " + songData.external_urls.spotify + "\nAlbum: " + songData.album.name + "\n", function (error) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('An error occurred: ' + error);
         }
       });
+    }
+  });
 }
 
 function omdbData(movie) {
-  var omdbURL = 'http://www.omdbapi.com/?t=' + movie + '&plot=short&tomatoes=' + omdb.key;
+  var omdbURL = 'http://www.omdbapi.com/?t=' + movie + "&y=&plot=short&apikey=trilogy";
 
   request(omdbURL, function (error, response, body) {
     if (!error && response.statusCode == 200) {
@@ -123,41 +130,77 @@ function omdbData(movie) {
       console.log("Rotten Tomatoes URL: " + torso.tomatoURL);
 
       //adds text to log.txt
-      fs.appendFile("log.txt", "\n" + '***** "' + info.Title + '" *****' + "\nReleased year" + info.Year + "\nIMDB rating " + info.Ratings[0].value + "\nRotten Tomatoes " + info.Ratings[1].Value + "\nLanguage: " + info.Language + "\nPlot: " + info.Plot + "\nActors: " + info.Actors + "\n",function (error) {
-        if(error){  
-        console.log(error);
+      fs.appendFile("log.txt", "\n" + '***** "' + info.Title + '" *****' + "\nReleased year" + info.Year + "\nIMDB rating " + info.Ratings[0].value + "\nRotten Tomatoes " + info.Ratings[1].Value + "\nLanguage: " + info.Language + "\nPlot: " + info.Plot + "\nActors: " + info.Actors + "\n", function (error) {
+        if (error) {
+          console.log(error);
         }
       });
-    }else {
+    } else {
       console.log('Error occurred.');
+    }
+    if (movie === "Mr. Nobody") {
+      console.log("-----------------------");
+      console.log("If you haven't watched 'Mr. Nobody,' then you should: http://www.imdb.com/title/tt0485947/");
+      console.log("It's on Netflix!");
+
+      //adds text to log.txt
+      fs.appendFile('log.txt', "-----------------------");
+      fs.appendFile('log.txt', "If you haven't watched 'Mr. Nobody,' then you should: http://www.imdb.com/title/tt0485947/");
+      fs.appendFile('log.txt', "It's on Netflix!");
     }
   });
 }
-
 //node do-what-it-says
-function doThis () {
+// function doThing() {
+//   fs.readFile("random.txt", "utf8", function (error, data) {
+//     var things = data.split(",");
+//     var command = things[0];
+//     var searchInput = things[1];
 
-  fs.readFile("random.txt", "utf8", function(error, data) {
+//     if (!error) {
 
-      var things = data.split(",");
-      var command = things[0];
-      var searchInput = things[1];
+//       for (var i = 1; i < things.length; i++) {
+//         if (things === "my-tweets") {
+//           myTweets(searchInput);
+//         } else if (things === "spotify-this-song") {
+//           spotifyThisSong(searchInput);
+//         } else if (things === "movie-this") {
+//           movieThis(searchInput);
+//         } else {
+//           return;
+//         }
+//       }
+//     } else {
+//       return console.log(error);
+//     }
+//   });
+// }
+function doThing() {
+  fs.readFile("random.txt", "utf8", function(error, data){  
+    console.log(error);
+    console.log(data);
+    
+    var splice = data.split(",");
 
-      if (!error) {
-
-          for (var i = 1; i < things.length; i++) {
-              if (command === "my-tweets") {
-                  myTweets(searchInput);
-              } else if (command === "spotify-this-song") {
-                  spotifyThisSong(searchInput);
-              } else if (command === "movie-this") {
-                  movieThis(searchInput);
-              } else {
-                  return;
-              }
-          }
-      } else {
-          return console.log(error);
+    action = splice[0];
+    detail = splice[1];
+    console.log(action);
+    console.log("tama beans");
+    console.log(detail);
+    
+    userSong = detail;
+      spotify.search({ type:'track', query: userSong}, function(err, data) {
+      if(!error) {
+        console.log(data.tracks.items[0]);
+        console.log("Artist: " + data.tracks.items[0].artists[0].name);
+        console.log("Song name: " + data.tracks.items[0].name);
+        console.log("Link Preview: " + data.tracks.items[0].preview_url);
+        console.log("Album: " + data.tracks.items[0].album.name);
+  
       }
+      else if (!data){
+        console.log("'The Sign' by Ace of Base");
+      }
+    });
   });
-}
+}  
