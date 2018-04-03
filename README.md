@@ -1,6 +1,5 @@
 to do:
-identify "split"(175),
-identify "items"(88),
+identify "items"for commands do what is says and spotify this song,
 
 ## Welcome to GitHub Pages
 
