@@ -1,40 +1,79 @@
-to do:
-identify "items"for commands do what is says and spotify this song,
+# liri-node-app
 
-## Welcome to GitHub Pages
+LIRI is a Language Interpretation and Recognition Interface, a command line node app that takes in parameters and gives you back data.
 
-You can use the [editor on GitHub](https://github.com/geina17/liri-bot/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+To retrieve data that will power this app, you will need to obtain keys and send requests to the following APIs (links are provided in materials sources below):
+* Twitter
+* Spotify
+* OMDB
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## Function
 
-### Markdown
+The app will take the following commands:
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+* `my-tweets`
 
-```markdown
-Syntax highlighted code block
+* `spotify-this-song`
 
-# Header 1
-## Header 2
-### Header 3
+* `movie-this`
 
-- Bulleted
-- List
+* `do-what-it-says`
 
-1. Numbered
-2. List
+### What Each Command Does
 
-**Bold** and _Italic_ and `Code` text
+####  1. `node liri.js my-tweets`
+* Shows the following information about the 20 most recent tweets:
+    * Text
+    * Date created
 
-[Link](url) and ![Image](src)
-```
+#### 2. `node liri.js spotify-this-song '<song name here>'`
+* Shows the following information about the song:
+    * Artist
+    * Name
+    * Album
+    * Preview link
+* Information defaults to "The Sign" by Ace of Base if no song name is provided
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+#### 3. `node liri.js movie-this '<movie name here>'`
+* Shows the following information about the movie.
+    * Title
+    * Year
+    * IMDB rating
+    * Rotten Tomatoes rating
+    * Production country
+    * Language
+    * Plot
+    * Actors
+* Information defaults to "Mr. Nobody" if no movie name is provided
 
-### Jekyll Themes
+#### 4. `node liri.js do-what-it-says`
+* Using the `fs` Node package, LIRI will take the text inside of `random.txt` and use it to call one of LIRI's commands
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/geina17/liri-bot/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+## Bonus Feature
+In addition to the terminal/bash window, both the commands and the data output are stored and accessible in a .txt file called `log.txt`.
 
-### Support or Contact
+## Languages and Libraries Used
+* Node.js
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+## Materials Sources
+* [Twitter](https://www.npmjs.com/package/twitter)
+
+* [Node-Spotify-API](https://www.npmjs.com/package/node-spotify-api)
+
+* [Request](https://www.npmjs.com/package/request)
+
+* [OMDB API](http://www.omdbapi.com)
+
+* [DotEnv](https://www.npmjs.com/package/dotenv)
+
+
+
+
+
+
+
+
+
+
+
+
